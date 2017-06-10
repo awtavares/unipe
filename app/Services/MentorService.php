@@ -76,7 +76,7 @@ class MentorService
             }
             if($mentor):
                 // Criar um evento e jogar numa queue, se não vai dar lag
-                Mail::send('email.welcome', ['mentor' => $mentor], function ($message) use ($mentor) {
+                Mail::send('email.welcome', ['mentor' => $mentor, 'senha' => $data['password']], function ($message) use ($mentor) {
                     $message->from('joaomarcusjesus@gmail.com', 'Mentoring - Unipê 2017');
                     $message->to($mentor->email)->subject('Cadastro feito com sucesso!');
                 });

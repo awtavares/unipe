@@ -93,9 +93,9 @@ class DemandService
 
             foreach ($admins as $admin){
 
-                Mail::send('email.createDemand', ['aluno' => $data], function ($message) use ($admin) {
+                Mail::send('email.createDemand', ['demanda' => $data, 'mediador'=>$admin], function ($message) use ($admin) {
                     $message->from('joaomarcusjesus@gmail.com', 'Mentoring - Unipê 2017');
-                    $message->to($admin->email)->subject('Cadastro feito com sucesso!');
+                    $message->to($admin->email)->subject('Mentoring - Nova demanda cadastrada');
                 });
             }
 

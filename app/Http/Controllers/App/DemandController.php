@@ -152,9 +152,9 @@ class DemandController extends Controller
         $selectMentor->qtd = $selectMentor->qtd + 1;
         $selectMentor->save();
 
-        Mail::send('email.encaminhar', ['demanda' => $demandFind], function ($message) use ($selectMentor) {
+        Mail::send('email.encaminhar', ['demanda' => $demandFind, 'mentor' => $selectMentor], function ($message) use ($selectMentor) {
             $message->from('joaomarcusjesus@gmail.com', 'Mentoring - Unipê 2017');
-            $message->to($selectMentor->email)->subject('Cadastro feito com sucesso!');
+            $message->to($selectMentor->email)->subject('Mentoring - Existe uma nova demanda para você');
         });
 
         return redirect()->route('app.demand.index');
@@ -173,9 +173,16 @@ class DemandController extends Controller
     {
         /** COLOCAR NO SERVICE */
         $demand = $this->demandRepository->find($request['demand_id']);
+        $aluno = $this->userRepository->find($demand->user_id);
+
         $demand->answer = $request['answer'];
         $demand->status = 3;
         $demand->save();
+
+        Mail::send('email.respostaDemanda', ['demanda' => $demand, 'aluno' => $aluno], function ($message) use ($aluno) {
+            $message->from('joaomarcusjesus@gmail.com', 'Mentoring - Unipê 2017');
+            $message->to($aluno->email)->subject('Mentoring - Sua dúvida foi respondida');
+        });
 
         return redirect()->route('app.demand.index');
     }
